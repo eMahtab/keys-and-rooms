@@ -35,7 +35,7 @@ Explanation: We can not enter room number 2 since the only key that unlocks it i
 6. All the values of rooms[i] are unique.
 
 ## Implementation 1 : Trying to visit the rooms in sequence (This approach doesn't work)
-e.g. this approach will fail for inputs similar to this `[[2],[],[1]]`
+e.g. this approach will fail for inputs similar to this `[[2],[],[1]]`, for this input we can visit the rooms in order 0, 2, 1 but the below implementation will return false
 ```java
 class Solution {
     public boolean canVisitAllRooms(List<List<Integer>> rooms) {
@@ -49,6 +49,30 @@ class Solution {
             set.addAll(keys);
         }
         return true;
+    }
+}
+```
+
+## Implementation 2 : BFS
+```java
+class Solution {
+    public boolean canVisitAllRooms(List<List<Integer>> rooms) {
+        Queue<Integer> queue = new LinkedList<>();
+        int roomsVisited = 0;
+        Set<Integer> visited = new HashSet<>();
+        queue.add(0);
+        while(!queue.isEmpty()) {
+            int room = queue.remove();
+            if(visited.contains(room)) continue;
+            roomsVisited++;
+            visited.add(room);
+            List<Integer> keys = rooms.get(room);
+            for(int key : keys) {
+                if(!visited.contains(key))
+                   queue.add(key);
+            }
+        }
+        return roomsVisited == rooms.size();
     }
 }
 ```
